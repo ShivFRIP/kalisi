@@ -1,0 +1,111 @@
+# Deploys Kalisi to contabo1 from GitHub's runners (they can reach the server over SSH).
+#
+# Needs ONE repository secret (Settings → Secrets and variables → Actions):
+#   CONTABO_SSH_KEY   a private key authorised for root@80.65.208.51 (preferred), or
+#   CONTABO_PASSWORD  the root password
+#
+# Triggers:
+#   push to branch deploy/contabo1      commit message decides: "[install]" installs/updates, anything else only checks
+#   Actions tab → Deploy to contabo1 → Run workflow   (choose check or install)
+#
+# "check" is read-only: it reports what's on the server and changes nothing.
+# "install" copies this commit to /root/kalisi (keeping the server's deploy/contabo1/.env), runs
+# deploy/contabo1/install.sh --yes, then tests the public links from the internet.
+name: Deploy to contabo1
+on:
+  push:
+    branches: [deploy/contabo1]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: check (read-only) or install
+        type: choice
+        options: [check, install]
+        default: check
+concurrency: deploy-contabo1
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      HOST: 80.65.208.51
+      DOMAIN: kalisi.80-65-208-51.sslip.io
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Decide action
+        id: act
+        env:
+          INPUT: ${{ github.event.inputs.action }}
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          a="${INPUT:-check}"
+          case "$MSG" in *"[install]"*) a=install;; esac
+          echo "action=$a" >> "$GITHUB_OUTPUT"
+          echo "Action: $a"
+
+      - name: SSH access
+        env:
+          SSH_KEY: ${{ secrets.CONTABO_SSH_KEY }}
+          SSH_PASSWORD: ${{ secrets.CONTABO_PASSWORD }}
+        run: |
+          if [ -z "$SSH_KEY" ] && [ -z "$SSH_PASSWORD" ]; then
+            echo "::error::Add the repository secret CONTABO_SSH_KEY or CONTABO_PASSWORD (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          OPTS="-o StrictHostKeyChecking=accept-new -o ServerAliveInterval=30 -o ConnectTimeout=20"
+          if [ -n "$SSH_KEY" ]; then
+            printf '%s\n' "$SSH_KEY" > ~/.ssh/contabo && chmod 600 ~/.ssh/contabo
+            printf '#!/bin/sh\nexec ssh -i ~/.ssh/contabo -o BatchMode=yes %s root@%s "$@"\n' "$OPTS" "$HOST" > ~/remote
+          else
+            sudo apt-get install -y -q sshpass >/dev/null
+            echo "SSHPASS=$SSH_PASSWORD" >> "$GITHUB_ENV"
+            printf '#!/bin/sh\nexec sshpass -e ssh -o PubkeyAuthentication=no %s root@%s "$@"\n' "$OPTS" "$HOST" > ~/remote
+          fi
+          chmod +x ~/remote
+          ~/remote 'echo "connected to $(hostname) as $(whoami)"'
+
+      - name: Read-only check of the server
+        run: |
+          ~/remote 'bash -s' <<'EOF'
+          set +e
+          echo "== system";       . /etc/os-release; echo "$PRETTY_NAME, kernel $(uname -r), up $(uptime -p)"
+          echo "== load";         cat /proc/loadavg; nproc
+          echo "== memory";       free -h | sed -n 1,2p
+          echo "== disk";         df -h / | tail -1
+          echo "== listening on 80/443/5432/8100"; ss -Htlnp '( sport = :80 or sport = :443 or sport = :5432 or sport = :8100 )'
+          echo "== docker";       docker --version 2>/dev/null || echo "not installed"; docker ps --format '{{.Names}} {{.Image}} {{.Status}}' 2>/dev/null
+          echo "== nginx";        nginx -v 2>&1; ls -l /etc/nginx/sites-enabled/ 2>/dev/null; grep -Rh "server_name\|listen\|autoindex\|root " /etc/nginx/sites-enabled/ 2>/dev/null | sed 's/^ */   /'
+          echo "== firewall";     ufw status 2>/dev/null | head -12 || echo "ufw not present"
+          echo "== certbot";      certbot --version 2>&1 | head -1; ls /etc/letsencrypt/live 2>/dev/null
+          echo "== postgresql";   (pg_lsclusters 2>/dev/null || echo "no pg_lsclusters") | head -5
+          echo "== /root";        ls -1 /root | head -30
+          echo "== kalisi";       ls -la /root/kalisi/deploy/contabo1 2>/dev/null || echo "not installed yet"
+          echo "== python3";      python3 --version
+          EOF
+
+      - name: Copy this commit to /root/kalisi
+        if: steps.act.outputs.action == 'install'
+        run: |
+          tar czf - --exclude=.git --exclude=node_modules --exclude=.venv --exclude=dist \
+              --exclude=deploy/contabo1/.env --exclude=deploy/contabo1/Caddyfile.local --exclude=deploy/contabo1/static.local . \
+            | ~/remote 'mkdir -p /root/kalisi && tar xzf - -C /root/kalisi && echo "$GITHUB_SHA" > /root/kalisi/DEPLOYED_COMMIT'
+          ~/remote "echo $GITHUB_SHA > /root/kalisi/DEPLOYED_COMMIT && ls /root/kalisi"
+
+      - name: Install / update
+        if: steps.act.outputs.action == 'install'
+        run: ~/remote 'bash /root/kalisi/deploy/contabo1/install.sh --yes'
+
+      - name: Test the public links from the internet
+        if: steps.act.outputs.action == 'install'
+        run: |
+          sleep 5
+          for path in /survey/ /demo/ /demo/presenter.html /; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "https://$DOMAIN$path" || true)
+            [ "$code" = 000 ] && code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "http://$DOMAIN$path" || true) (http only)"
+            echo "$path -> $code"
+          done
+          curl -sI --max-time 30 "https://$DOMAIN/survey/" | grep -i -E "^HTTP|strict-transport" || true
