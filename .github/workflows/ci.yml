@@ -23,6 +23,8 @@ jobs:
         run: alembic upgrade head && alembic check
       - name: Tests
         run: pytest -q
+      - name: Demo and survey pages build
+        run: python3 ../static/build.py --out "$RUNNER_TEMP/static" && test -s "$RUNNER_TEMP/static/survey/index.html"
   frontend:
     runs-on: ubuntu-latest
     defaults: { run: { working-directory: frontend } }

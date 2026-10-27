@@ -9,3 +9,4 @@ frontend/dist/
 .DS_Store
 deploy/contabo1/.env
 deploy/contabo1/Caddyfile.local
+deploy/contabo1/static.local/

@@ -69,7 +69,9 @@ docker compose up -d --build
 docker compose run --rm app python -m kalisi.seed --at 07:40
 ```
 
-The Docker setup was built and run end to end in the development sandbox, including a browser test across the three apps through the password-protected HTTPS proxy. Public certificate issuance could not be tested there. For the contabo1 demo server, see `deploy/contabo1/README.md`.
+The Docker setup was built and run end to end in the development sandbox, including a browser test across the three apps through the password-protected HTTPS proxy. Public certificate issuance could not be tested there. For the contabo1 demo server, which also hosts the policymaker demo (`/demo/`) and the survey (`/survey/`), see `deploy/contabo1/README.md`.
+
+The policymaker demo and the survey are built from `static/src` with `python3 static/build.py --out <dir>` (standard library only). The survey's Google Sheet receiver and its setup guide are in `docs/survey/`.
 
 ## A 10-minute demo for policymakers
 
@@ -177,7 +179,8 @@ frontend/
   src/rider, src/driver, src/ops   the three apps
   src/api.ts, ui.tsx, MapView.tsx  shared client, components, map
 docs/             architecture and design notes
-deploy/contabo1/  demo-server installer (Docker + Caddy HTTPS + demo password)
+deploy/contabo1/  demo-server installer: prototype (password), demo and survey (open), HTTPS via nginx or Caddy
+static/           the policymaker demo and the commute survey (single-file pages) and their build script
 scripts/          cross-app browser check
 ```
 
