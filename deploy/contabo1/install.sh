@@ -3,6 +3,7 @@
 #
 #   bash /root/kalisi/deploy/contabo1/install.sh            # asks before changing anything
 #   bash /root/kalisi/deploy/contabo1/install.sh --yes      # no questions
+#   bash /root/kalisi/deploy/contabo1/install.sh --check    # only report what's there and what would change
 #
 # Publishes, on one HTTPS address:
 #   /survey/   the commute survey             (open to anyone)
@@ -27,6 +28,7 @@ DEPLOY="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(cd "$DEPLOY/../.." && pwd)"
 ENV_FILE="$DEPLOY/.env"
 YES=0; [[ "${1:-}" == "--yes" ]] && YES=1
+CHECK=0; [[ "${1:-}" == "--check" ]] && CHECK=1
 NGINX_SITE=/etc/nginx/sites-available/kalisi
 WEBROOT=/var/www/kalisi
 MARK="# Managed by Kalisi deploy/contabo1/install.sh"
@@ -98,6 +100,10 @@ else
 fi
 [[ -n "$FW_CHANGE" ]] && echo "  - $FW_CHANGE"
 echo "  - load the demo network if the Kalisi database is empty"
+if [[ $CHECK -eq 1 ]]; then
+  echo; echo "Check only: nothing was changed. Run with --yes (or without options, to be asked) to install."
+  exit 0
+fi
 if [[ $YES -eq 0 ]]; then
   read -r -p $'\nProceed? [y/N] ' ans
   [[ "$ans" =~ ^[Yy]$ ]] || die "nothing changed"
