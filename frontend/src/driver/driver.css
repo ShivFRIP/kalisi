@@ -1,0 +1,89 @@
+/* Driver app: used at the wheel and at the kerb, so everything is big, high-contrast and one tap away. */
+.drv { font-size: 16px; }
+.drv .page { padding-bottom: 32px; }
+.drv .topbar h1 { font-size: 1.1rem; }
+.drv-iconbtn { display: inline-grid; place-items: center; min-width: 48px; height: 48px; border-radius: 14px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); padding: 0 10px; font-weight: 800; }
+.drv-iconbtn svg { width: 22px; height: 22px; }
+.drv-sos { border: 2px solid var(--bad); color: var(--bad); letter-spacing: .04em; }
+.drv-big { width: 100%; min-height: 64px; font-size: 1.15rem; border-radius: 16px; }
+.drv-big svg { width: 24px; height: 24px; }
+.drv-btn { min-height: 48px; padding: 10px 16px; font-size: 1rem; border-radius: 12px; }
+.drv-sub { font-size: .95rem; color: var(--muted); }
+
+/* banner for queued updates / offline */
+.drv-queue { display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: var(--warn-soft); color: var(--ink);
+  font-weight: 600; font-size: .95rem; border-bottom: 1px solid var(--line); }
+.drv-queue.offline { background: var(--bad-soft); }
+.drv-queue svg { width: 20px; height: 20px; flex: none; }
+
+/* duty summary */
+.drv-reg { font-family: var(--f-mono); font-size: 1.5rem; font-weight: 600; letter-spacing: .02em; }
+.drv-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+.drv-facts .v { font-weight: 700; font-size: 1.05rem; }
+.drv-facts .k { font-size: .8rem; color: var(--muted); }
+
+/* timeline */
+.drv-tl { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.drv-tl li { position: relative; display: grid; grid-template-columns: 64px 22px minmax(0, 1fr); gap: 8px; align-items: start; }
+.drv-tl .t { font-family: var(--f-mono); font-size: .9rem; font-weight: 600; padding-top: 14px; text-align: right; color: var(--muted); }
+.drv-tl .rail { position: relative; align-self: stretch; display: flex; justify-content: center; }
+.drv-tl .rail::before { content: ""; position: absolute; top: 0; bottom: 0; width: 3px; background: var(--line); border-radius: 2px; }
+.drv-tl li:first-child .rail::before { top: 18px; }
+.drv-tl li:last-child .rail::before { bottom: calc(100% - 18px); }
+.drv-tl .dot { position: relative; margin-top: 12px; width: 14px; height: 14px; border-radius: 50%; background: var(--surface); border: 3px solid var(--muted); }
+.drv-tl .dot.trip { border-color: var(--route); background: var(--route); }
+.drv-tl .dot.done { border-color: var(--good); background: var(--good); }
+.drv-tl .dot.now { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+.drv-tl .body { padding: 8px 0 12px; min-width: 0; }
+.drv-tripcard { display: flex; flex-direction: column; gap: 6px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--surface);
+  border-radius: 14px; padding: 12px; min-height: 56px; color: inherit; }
+.drv-tripcard:hover { border-color: var(--route); }
+.drv-tripcard.next { border: 2px solid var(--route); }
+.drv-code { font-family: var(--f-display); font-weight: 700; font-size: 1.15rem; }
+
+/* current stop panel */
+.drv-now { border: 2px solid var(--route); }
+.drv-stopname { font-family: var(--f-display); font-size: 1.6rem; font-weight: 700; line-height: 1.15; }
+.drv-rider { display: flex; align-items: center; gap: 10px; padding: 10px 0; min-height: 60px; }
+.drv-rider + .drv-rider { border-top: 1px solid var(--line); }
+.drv-rider .nm { font-weight: 700; font-size: 1.05rem; flex: 1; min-width: 0; }
+.drv-count { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
+.drv-count svg { width: 18px; height: 18px; }
+
+/* stop list */
+.drv-stops { list-style: none; margin: 0; padding: 0; }
+.drv-stops li { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 0; }
+.drv-stops li + li { border-top: 1px solid var(--line); }
+.drv-stops .mk { width: 22px; height: 22px; border-radius: 50%; border: 3px solid var(--line); display: grid; place-items: center; }
+.drv-stops .mk svg { width: 14px; height: 14px; }
+.drv-stops li.passed .mk { background: var(--good); border-color: var(--good); color: #fff; }
+.drv-stops li.passed .nm { color: var(--muted); }
+.drv-stops li.current .mk { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+.drv-stops li.current .nm { font-weight: 800; }
+
+/* segmented tabs */
+.drv-seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface2); border-radius: 12px; padding: 4px; gap: 4px; }
+.drv-seg button { min-height: 44px; border: 0; border-radius: 9px; background: transparent; font-weight: 700; color: var(--muted); }
+.drv-seg button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+
+/* code keypad */
+.drv-code-boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.drv-code-boxes span { height: 64px; border: 2px solid var(--line); border-radius: 14px; display: grid; place-items: center;
+  font-family: var(--f-mono); font-size: 2rem; font-weight: 600; background: var(--surface); }
+.drv-code-boxes span.filled { border-color: var(--route); }
+.drv-code-boxes.err span { border-color: var(--bad); }
+.drv-keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.drv-keys button { min-height: 60px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); font-family: var(--f-mono);
+  font-size: 1.6rem; font-weight: 600; }
+.drv-keys button:active { background: var(--route-soft); }
+.drv-keys button svg { width: 26px; height: 26px; }
+.drv-loc { display: flex; align-items: center; gap: 12px; min-height: 52px; }
+.drv-loc + .drv-loc { border-top: 1px solid var(--line); }
+@media (max-width: 370px) { .drv-stopname { font-size: 1.35rem; } .drv-tl li { grid-template-columns: 54px 20px minmax(0, 1fr); } }
+
+/* Toasts at the top in the driver app, so they never cover the big action buttons or the keypad. */
+body:has(.drv) .toast { top: max(10px, env(safe-area-inset-top)); bottom: auto; }
+/* The map stays mounted (with its size) when the Stops tab is shown: Leaflet misbehaves if unmounted mid-animation
+   or resized to zero. */
+.drv-offscreen { position: absolute; left: -10000px; top: 0; width: min(448px, calc(100vw - 32px)); visibility: hidden; pointer-events: none; }

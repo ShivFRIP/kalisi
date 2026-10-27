@@ -1,0 +1,556 @@
+{
+ "_sources": {
+  "localities_and_offices": "OpenStreetMap contributors (ODbL 1.0), Telangana extract dated 27 Oct 2026, via the gazetteer built for the Kalisi demo",
+  "metro_stations": "Hyderabad Metro Rail timetable feed (GTFS), Open Data Telangana, July 2026",
+  "note": "Points are locality or building centroids, not field-audited bus stops. Every stop needs a safety and access audit before use."
+ },
+ "campuses": [
+  {
+   "code": "fd",
+   "name": "Financial District",
+   "point": [
+    17.41298,
+    78.33863
+   ]
+  },
+  {
+   "code": "waverock",
+   "name": "Waverock, Nanakramguda",
+   "point": [
+    17.41838,
+    78.34734
+   ]
+  },
+  {
+   "code": "gachibowli",
+   "name": "DLF Cybercity, Gachibowli",
+   "point": [
+    17.44717,
+    78.35598
+   ]
+  },
+  {
+   "code": "hitec",
+   "name": "Mindspace, HITEC City",
+   "point": [
+    17.43965,
+    78.38239
+   ]
+  },
+  {
+   "code": "pocharam",
+   "name": "Pocharam IT SEZ",
+   "point": [
+    17.43661,
+    78.64222
+   ]
+  },
+  {
+   "code": "kokapet",
+   "name": "Kokapet",
+   "point": [
+    17.39486,
+    78.33652
+   ]
+  }
+ ],
+ "localities": {
+  "Kompally": [
+   17.5401,
+   78.4909
+  ],
+  "Bachupally": [
+   17.54105,
+   78.36355
+  ],
+  "Nizampet": [
+   17.5154,
+   78.38172
+  ],
+  "Miyapur": [
+   17.49816,
+   78.35676
+  ],
+  "Kukatpally": [
+   17.49308,
+   78.40544
+  ],
+  "Chandanagar": [
+   17.49361,
+   78.32464
+  ],
+  "Nallagandla": [
+   17.47748,
+   78.30604
+  ],
+  "Kondapur": [
+   17.45879,
+   78.37306
+  ],
+  "Manikonda": [
+   17.40371,
+   78.37661
+  ],
+  "Tolichowki": [
+   17.40029,
+   78.41181
+  ],
+  "Mehdipatnam": [
+   17.39426,
+   78.43425
+  ],
+  "Ameerpet": [
+   17.4375,
+   78.44825
+  ],
+  "Begumpet": [
+   17.44619,
+   78.46302
+  ],
+  "Uppal": [
+   17.40251,
+   78.56126
+  ],
+  "LB Nagar": [
+   17.35016,
+   78.55109
+  ],
+  "Madhapur": [
+   17.44089,
+   78.39163
+  ],
+  "Gachibowli": [
+   17.44362,
+   78.35196
+  ],
+  "Kokapet": [
+   17.39486,
+   78.33652
+  ],
+  "Secunderabad": [
+   17.43595,
+   78.50005
+  ]
+ },
+ "metro": {
+  "RED": [
+   {
+    "name": "Miyapur",
+    "point": [
+     17.4965,
+     78.373
+    ]
+   },
+   {
+    "name": "JNTU College",
+    "point": [
+     17.4987,
+     78.3889
+    ]
+   },
+   {
+    "name": "KPHB Colony",
+    "point": [
+     17.4938,
+     78.4018
+    ]
+   },
+   {
+    "name": "Kukatpally",
+    "point": [
+     17.4849,
+     78.4118
+    ]
+   },
+   {
+    "name": "Balanagar",
+    "point": [
+     17.4767,
+     78.4221
+    ]
+   },
+   {
+    "name": "Moosapet",
+    "point": [
+     17.4719,
+     78.4261
+    ]
+   },
+   {
+    "name": "Bharat Nagar",
+    "point": [
+     17.4629,
+     78.4305
+    ]
+   },
+   {
+    "name": "Erragadda",
+    "point": [
+     17.457,
+     78.4336
+    ]
+   },
+   {
+    "name": "ESI Hospital",
+    "point": [
+     17.4487,
+     78.4376
+    ]
+   },
+   {
+    "name": "S. R. Nagar",
+    "point": [
+     17.4431,
+     78.4407
+    ]
+   },
+   {
+    "name": "Ameerpet",
+    "point": [
+     17.4357,
+     78.4448
+    ]
+   },
+   {
+    "name": "Panjagutta",
+    "point": [
+     17.4289,
+     78.451
+    ]
+   },
+   {
+    "name": "Erra Manzil",
+    "point": [
+     17.4202,
+     78.4563
+    ]
+   },
+   {
+    "name": "Khairatabad",
+    "point": [
+     17.4116,
+     78.4609
+    ]
+   },
+   {
+    "name": "Lakdi-ka-pul",
+    "point": [
+     17.404,
+     78.4649
+    ]
+   },
+   {
+    "name": "Assembly",
+    "point": [
+     17.398,
+     78.4709
+    ]
+   },
+   {
+    "name": "Nampally",
+    "point": [
+     17.3922,
+     78.4702
+    ]
+   },
+   {
+    "name": "Gandhi Bhavan",
+    "point": [
+     17.3858,
+     78.4733
+    ]
+   },
+   {
+    "name": "Osmania Medical College",
+    "point": [
+     17.3821,
+     78.4817
+    ]
+   },
+   {
+    "name": "Mahatma Gandhi Bus Station",
+    "point": [
+     17.3798,
+     78.4862
+    ]
+   },
+   {
+    "name": "Malakpet",
+    "point": [
+     17.3772,
+     78.4939
+    ]
+   },
+   {
+    "name": "New Market",
+    "point": [
+     17.3734,
+     78.5032
+    ]
+   },
+   {
+    "name": "Musarambagh",
+    "point": [
+     17.3711,
+     78.512
+    ]
+   },
+   {
+    "name": "Dilsukh Nagar",
+    "point": [
+     17.3685,
+     78.5254
+    ]
+   },
+   {
+    "name": "Chaitanyapuri",
+    "point": [
+     17.3682,
+     78.5381
+    ]
+   },
+   {
+    "name": "Victoria Memorial",
+    "point": [
+     17.3619,
+     78.544
+    ]
+   },
+   {
+    "name": "L. B. Nagar",
+    "point": [
+     17.3498,
+     78.5479
+    ]
+   }
+  ],
+  "BLUE": [
+   {
+    "name": "Raidurg",
+    "point": [
+     17.442,
+     78.3772
+    ]
+   },
+   {
+    "name": "HITEC City",
+    "point": [
+     17.449,
+     78.3831
+    ]
+   },
+   {
+    "name": "Durgam Cheruvu",
+    "point": [
+     17.4429,
+     78.3876
+    ]
+   },
+   {
+    "name": "Madhapur",
+    "point": [
+     17.4373,
+     78.4004
+    ]
+   },
+   {
+    "name": "Peddamma Gudi",
+    "point": [
+     17.4307,
+     78.4084
+    ]
+   },
+   {
+    "name": "Jubilee Hills Checkpost",
+    "point": [
+     17.4282,
+     78.4137
+    ]
+   },
+   {
+    "name": "Road No 5 Jubilee Hills",
+    "point": [
+     17.43,
+     78.4232
+    ]
+   },
+   {
+    "name": "Yusufguda",
+    "point": [
+     17.4351,
+     78.4273
+    ]
+   },
+   {
+    "name": "Madhura Nagar",
+    "point": [
+     17.437,
+     78.4391
+    ]
+   },
+   {
+    "name": "Ameerpet",
+    "point": [
+     17.4357,
+     78.4448
+    ]
+   },
+   {
+    "name": "Begumpet",
+    "point": [
+     17.4376,
+     78.4569
+    ]
+   },
+   {
+    "name": "Prakash Nagar",
+    "point": [
+     17.4449,
+     78.4659
+    ]
+   },
+   {
+    "name": "Rasoolpura",
+    "point": [
+     17.4436,
+     78.4764
+    ]
+   },
+   {
+    "name": "Paradise",
+    "point": [
+     17.4435,
+     78.4862
+    ]
+   },
+   {
+    "name": "Parade Ground",
+    "point": [
+     17.4432,
+     78.4975
+    ]
+   },
+   {
+    "name": "Secunderabad East",
+    "point": [
+     17.4357,
+     78.5055
+    ]
+   },
+   {
+    "name": "Mettuguda",
+    "point": [
+     17.4355,
+     78.5196
+    ]
+   },
+   {
+    "name": "Tarnaka",
+    "point": [
+     17.4274,
+     78.53
+    ]
+   },
+   {
+    "name": "Habsiguda",
+    "point": [
+     17.4202,
+     78.5405
+    ]
+   },
+   {
+    "name": "NGRI",
+    "point": [
+     17.4148,
+     78.5463
+    ]
+   },
+   {
+    "name": "Stadium",
+    "point": [
+     17.4074,
+     78.5543
+    ]
+   },
+   {
+    "name": "Uppal",
+    "point": [
+     17.4001,
+     78.5602
+    ]
+   },
+   {
+    "name": "Nagole",
+    "point": [
+     17.3908,
+     78.5588
+    ]
+   }
+  ],
+  "GREEN": [
+   {
+    "name": "Mahatma Gandhi Bus Station",
+    "point": [
+     17.3798,
+     78.4862
+    ]
+   },
+   {
+    "name": "Sultan Bazar",
+    "point": [
+     17.3844,
+     78.484
+    ]
+   },
+   {
+    "name": "Narayanaguda",
+    "point": [
+     17.3944,
+     78.49
+    ]
+   },
+   {
+    "name": "Chikkadpally",
+    "point": [
+     17.4004,
+     78.4949
+    ]
+   },
+   {
+    "name": "RTC Cross Roads",
+    "point": [
+     17.407,
+     78.4968
+    ]
+   },
+   {
+    "name": "Musheerabad",
+    "point": [
+     17.4179,
+     78.4995
+    ]
+   },
+   {
+    "name": "Gandhi Hospital",
+    "point": [
+     17.4255,
+     78.502
+    ]
+   },
+   {
+    "name": "Secunderabad West",
+    "point": [
+     17.4338,
+     78.4995
+    ]
+   },
+   {
+    "name": "JBS Parade Ground",
+    "point": [
+     17.4445,
+     78.4976
+    ]
+   }
+  ]
+ }
+}

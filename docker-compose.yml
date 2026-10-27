@@ -1,0 +1,28 @@
+# Local or single-server deployment: PostgreSQL/PostGIS + the Kalisi app on http://localhost:8000
+#   docker compose up -d --build
+#   docker compose run --rm app python -m kalisi.seed      # optional demo data
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: kalisi
+      POSTGRES_PASSWORD: ${KALISI_DB_PASSWORD:-kalisi}
+      POSTGRES_DB: kalisi
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kalisi -d kalisi"]
+      interval: 5s
+      retries: 20
+  app:
+    build: .
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      KALISI_DATABASE_URL: postgresql+psycopg://kalisi:${KALISI_DB_PASSWORD:-kalisi}@db:5432/kalisi
+      KALISI_JWT_SECRET: ${KALISI_JWT_SECRET:?set KALISI_JWT_SECRET in .env}
+      KALISI_ENV: ${KALISI_ENV:-dev}
+      KALISI_CORS_ORIGINS: ${KALISI_CORS_ORIGINS:-http://localhost:8000}
+      KALISI_OSRM_URL: ${KALISI_OSRM_URL:-}
+    ports: ["8000:8000"]
+volumes:
+  pgdata:

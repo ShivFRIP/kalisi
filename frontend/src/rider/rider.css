@@ -1,0 +1,78 @@
+/* Rider app: additions to the shared kit (styles.css). */
+.r-steps { display: flex; gap: 6px; }
+.r-steps span { flex: 1; height: 4px; border-radius: 999px; background: var(--line); }
+.r-steps span.on { background: var(--route); }
+
+.r-place { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--surface);
+  border-radius: var(--radius); padding: 12px 14px; min-height: 64px; }
+.r-place .ic { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; flex: none; background: var(--accent-soft); color: var(--warn); }
+.r-place.office .ic { background: var(--route-soft); color: var(--route); }
+.r-place .nm { font-weight: 700; display: block; }
+.r-place .chg { color: var(--route); font-weight: 700; font-size: .9em; flex: none; }
+
+.r-pickwrap { position: relative; }
+.r-crosshair { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -100%); pointer-events: none; z-index: 600;
+  color: var(--bad); filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
+.r-crosshair svg { width: 38px; height: 38px; fill: var(--bad); stroke: #fff; }
+.r-crossdot { position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--ink);
+  z-index: 600; pointer-events: none; opacity: .7; }
+.r-results { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+.r-results button { all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 11px 12px; min-height: 24px; }
+.r-results button + button { border-top: 1px solid var(--line); }
+.r-results button:hover, .r-results button:focus-visible { background: var(--surface2); }
+.r-results svg { color: var(--muted); flex: none; }
+
+.r-opt { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 8px; width: 100%;
+  border: 1.5px solid var(--line); background: var(--surface); border-radius: var(--radius); padding: 12px 14px; }
+.r-opt[aria-checked="true"] { border-color: var(--route); box-shadow: 0 0 0 3px var(--route-soft); }
+.r-opt:focus-visible { outline: 2.5px solid var(--accent); outline-offset: 2px; }
+.r-opt .times { font-family: var(--f-display); font-weight: 700; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.r-opt .fare { font-family: var(--f-display); font-weight: 700; font-size: 1.15rem; }
+.r-opt .leg { display: grid; grid-template-columns: 18px 1fr; gap: 2px 8px; font-size: .9em; }
+.r-opt .leg svg { color: var(--muted); margin-top: 2px; }
+.r-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line); flex: none; display: grid; place-items: center; }
+[aria-checked="true"] > .row > .r-radio, [aria-checked="true"] .r-radio { border-color: var(--route); }
+[aria-checked="true"] .r-radio::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--route); }
+
+.r-trip-hero { display: flex; flex-direction: column; gap: 4px; }
+.r-eta { font-family: var(--f-display); font-size: 1.55rem; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.r-code { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--route); color: var(--route-ink);
+  border-radius: 14px; padding: 12px 16px; }
+.r-code .digits { font-family: var(--f-mono); font-size: 2rem; font-weight: 500; letter-spacing: .3em; line-height: 1; }
+.r-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.r-facts > div { background: var(--surface2); border-radius: 12px; padding: 8px 10px; min-width: 0; }
+.r-facts b { display: block; font-size: .92em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.r-stops { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.r-stops li { display: grid; grid-template-columns: 18px 1fr auto; gap: 10px; align-items: start; padding: 6px 0; position: relative; }
+.r-stops li::before { content: ""; position: absolute; left: 8px; top: 18px; bottom: -6px; width: 2px; background: var(--line); }
+.r-stops li:last-child::before { display: none; }
+.r-stops .dot { width: 12px; height: 12px; border-radius: 50%; border: 3px solid var(--route); background: var(--surface); margin: 4px 0 0 3px; z-index: 1; }
+.r-stops li.passed .dot { background: var(--route); }
+.r-stops li.passed { color: var(--muted); }
+.r-stops li.me .dot { border-color: var(--accent); background: var(--accent); width: 16px; height: 16px; margin: 2px 0 0 1px; }
+
+.r-day { display: grid; grid-template-columns: 78px 1fr; gap: 8px; padding: 10px 0; }
+.r-day + .r-day { border-top: 1px solid var(--line); }
+.r-day .dname { font-weight: 700; line-height: 1.2; }
+.r-leg { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 4px 0; }
+.r-leg + .r-leg { border-top: 1px dashed var(--line); }
+
+.r-stars { display: flex; gap: 4px; }
+.r-stars button { all: unset; cursor: pointer; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; color: var(--line); }
+.r-stars button[aria-pressed="true"] { color: var(--accent); }
+.r-stars button svg { width: 30px; height: 30px; }
+.r-stars button[aria-pressed="true"] svg { fill: var(--accent); }
+.r-stars button:focus-visible { outline: 2.5px solid var(--accent); }
+.r-mini-stars { color: var(--accent); letter-spacing: 1px; }
+
+.r-sos { border: 1.5px solid var(--bad); color: var(--bad); background: var(--surface); }
+.r-big { font-family: var(--f-display); font-weight: 700; font-size: 1.6rem; line-height: 1.1; }
+.r-textarea { min-height: 72px; resize: vertical; }
+.r-kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: .92em; margin: 0; }
+.r-kv dt { color: var(--muted); }
+.r-kv dd { margin: 0; text-align: right; font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+.r-sticky-cta { position: sticky; bottom: 0; z-index: 400; background: linear-gradient(to top, var(--app) 75%, transparent); padding: 14px 0 max(14px, env(safe-area-inset-bottom)); margin-top: auto; }
+
+/* Sheets are scrolling flex columns; without this, tall children (results list, map) get squashed to nothing. */
+.mobile .sheet > * { flex-shrink: 0; }
+.mobile .page > * { flex-shrink: 0; }
