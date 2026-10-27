@@ -12,7 +12,7 @@ import secrets
 
 import jwt
 from fastapi import Depends, HTTPException
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.security import APIKeyHeader, HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -88,13 +88,18 @@ def issue_token(user: User) -> str:
 
 
 _bearer = HTTPBearer(auto_error=False)
+# The web apps send the token in X-Auth-Token, leaving the Authorization header free for a password-protected
+# proxy in front of a demo server (HTTP basic auth uses that header too). API clients may use either.
+_token_header = APIKeyHeader(name="X-Auth-Token", auto_error=False)
 
 
-def current_user(cred: HTTPAuthorizationCredentials | None = Depends(_bearer), db: Session = Depends(get_db)) -> User:
-    if cred is None:
+def current_user(cred: HTTPAuthorizationCredentials | None = Depends(_bearer), header_token: str | None = Depends(_token_header),
+                 db: Session = Depends(get_db)) -> User:
+    token = header_token or (cred.credentials if cred is not None else None)
+    if not token:
         raise HTTPException(401, "Sign in required")
     try:
-        claims = jwt.decode(cred.credentials, get_settings().jwt_secret, algorithms=["HS256"])
+        claims = jwt.decode(token, get_settings().jwt_secret, algorithms=["HS256"])
     except jwt.PyJWTError:
         raise HTTPException(401, "Session expired. Sign in again.")
     user = db.get(User, int(claims["sub"]))

@@ -1,0 +1,13 @@
+# Template: install.sh fills in __KALISI_DOMAIN__ and the demo user/password hash and writes Caddyfile.local.
+# Public entry point: automatic HTTPS (Let's Encrypt) for the domain, gzip, and one shared demo password.
+# Install files (manifests, icons, service worker) stay open so browsers can install the apps.
+__KALISI_DOMAIN__ {
+	encode gzip
+	@protected not path /manifest*.webmanifest /icon* /sw.js
+	basicauth @protected {
+		__DEMO_USER__ __DEMO_HASH__
+	}
+	reverse_proxy app:8000
+	header Strict-Transport-Security "max-age=31536000"
+	header X-Robots-Tag "noindex, nofollow"
+}

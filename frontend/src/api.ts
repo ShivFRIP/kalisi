@@ -40,7 +40,8 @@ export async function api<T>(app: AppKind | null, path: string, opts: { method?:
     : "";
   const headers: Record<string, string> = {};
   const s = app ? getSession(app) : null;
-  if (s) headers.Authorization = `Bearer ${s.token}`;
+  // Own header, so a password-protected demo proxy can keep using Authorization (HTTP basic auth).
+  if (s) headers["X-Auth-Token"] = s.token;
   if (opts.body !== undefined) headers["Content-Type"] = "application/json";
   let res: Response;
   try {

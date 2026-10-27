@@ -69,7 +69,7 @@ docker compose up -d --build
 docker compose run --rm app python -m kalisi.seed --at 07:40
 ```
 
-The Docker files follow standard patterns but **have not been run**: the environment this was built in had no Docker daemon. Everything else here was run and tested.
+The Docker setup was built and run end to end in the development sandbox, including a browser test across the three apps through the password-protected HTTPS proxy. Public certificate issuance could not be tested there. For the contabo1 demo server, see `deploy/contabo1/README.md`.
 
 ## A 10-minute demo for policymakers
 
@@ -177,6 +177,7 @@ frontend/
   src/rider, src/driver, src/ops   the three apps
   src/api.ts, ui.tsx, MapView.tsx  shared client, components, map
 docs/             architecture and design notes
+deploy/contabo1/  demo-server installer (Docker + Caddy HTTPS + demo password)
 scripts/          cross-app browser check
 ```
 

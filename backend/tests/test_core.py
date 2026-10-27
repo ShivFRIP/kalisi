@@ -56,6 +56,11 @@ def test_role_based_access(client):
     assert client.get("/api/v1/driver/today", headers=ops).status_code == 403
     assert client.get("/api/v1/ops/overview", headers=ops).status_code == 200
     assert client.get("/api/v1/ops/overview", headers={"Authorization": "Bearer nonsense"}).status_code == 401
+    # the web apps send the token in X-Auth-Token, so a demo proxy's basic-auth header can sit alongside it
+    token = ops["Authorization"].split()[1]
+    both = {"X-Auth-Token": token, "Authorization": "Basic ZGVtbzpwdw=="}
+    assert client.get("/api/v1/ops/overview", headers=both).status_code == 200
+    assert client.get("/api/v1/ops/overview", headers={"X-Auth-Token": "nonsense"}).status_code == 401
 
 
 def test_ledger_rejects_unbalanced(db):

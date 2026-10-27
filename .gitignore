@@ -7,3 +7,5 @@ frontend/dist/
 .env
 *.log
 .DS_Store
+deploy/contabo1/.env
+deploy/contabo1/Caddyfile.local

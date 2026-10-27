@@ -1,0 +1,46 @@
+# Kalisi demo on contabo1. Everything runs in its own containers and network; nothing touches the host's
+# PostgreSQL or other projects. Started by install.sh (project name "kalisi").
+name: kalisi
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kalisi
+      POSTGRES_PASSWORD: ${KALISI_DB_PASSWORD:?}
+      POSTGRES_DB: kalisi
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kalisi -d kalisi"]
+      interval: 5s
+      retries: 30
+    cpus: 1.0          # leave CPU for the other work on this box
+    mem_limit: 1g
+  app:
+    build: { context: ../.., dockerfile: Dockerfile }
+    restart: unless-stopped
+    depends_on: { db: { condition: service_healthy } }
+    environment:
+      KALISI_DATABASE_URL: postgresql+psycopg://kalisi:${KALISI_DB_PASSWORD:?}@db:5432/kalisi
+      KALISI_JWT_SECRET: ${KALISI_JWT_SECRET:?}
+      KALISI_ENV: dev                          # demo: sign-in codes on screen, demo accounts
+      KALISI_CORS_ORIGINS: https://${KALISI_DOMAIN:?}
+    ports: ["127.0.0.1:${KALISI_LOCAL_PORT:-8100}:8000"]   # local only; the public side is Caddy (or your nginx)
+    cpus: 2.0
+    mem_limit: 2g
+  caddy:
+    profiles: ["caddy"]                        # only when Kalisi owns ports 80/443
+    image: caddy:2.8
+    restart: unless-stopped
+    depends_on: [app]
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./Caddyfile.local:/etc/caddy/Caddyfile:ro    # rendered from Caddyfile by install.sh (domain + password hash)
+      - caddy_data:/data
+      - caddy_config:/config
+    cpus: 0.5
+    mem_limit: 256m
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

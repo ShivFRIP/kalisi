@@ -19,7 +19,7 @@ from . import clock
 from .config import get_settings
 from .db import Base, SessionLocal, engine
 from .geo import cell, haversine_km
-from .models import (Booking, Campus, CommuteIntent, Driver, Operator, Rating, Route, RouteStop, Stop, Trip,
+from .models import (AuditLog, Booking, Campus, CommuteIntent, Driver, Operator, Rating, Route, RouteStop, Stop, Trip,
                      TripTemplate, User, Vehicle, VehicleClass)
 from .services import passes
 from .services.allocation import allocate
@@ -145,6 +145,18 @@ def prev_weekday(d: dt.date) -> dt.date:
 def main(reset_db: bool, day: dt.date | None = None, at: dt.time | None = None, speed: float = 1.0) -> None:
     """Seed for service day `day` (default: today, or next Monday at weekends). If that isn't today, or `at` is
     given, the demo clock is set to that day and time (running at `speed`) so the network has trips to show."""
+    # Hold the lock the background loop uses (simulator.tick), so a running server can't allocate or advance
+    # trips while the demo network is half-built. Released when this connection closes.
+    lock = engine.connect()
+    lock.execute(text("select pg_advisory_lock(4242)"))
+    try:
+        _seed(reset_db, day, at, speed)
+    finally:
+        lock.execute(text("select pg_advisory_unlock(4242)"))
+        lock.close()
+
+
+def _seed(reset_db: bool, day: dt.date | None, at: dt.time | None, speed: float) -> None:
     if reset_db:
         reset()
     db = SessionLocal()
@@ -349,6 +361,8 @@ def main(reset_db: bool, day: dt.date | None = None, at: dt.time | None = None, 
             db.rollback()
 
     today_summary = allocate(db, today)
+    db.add(AuditLog(action="seed", detail={"service_day": today.isoformat()}))   # marks a complete seed (see deploy/)
+    db.commit()
     db.close()
     print(f"routes {len(routes)}, stops {len(stops)}, vehicles {len(FLEET)}, drivers {len(DRIVER_NAMES)}")
     print(f"riders with passes {sold + 1} (incl. demo), could not match {unmatched}, pooled for planner {pooled}, skips tomorrow {skips}")
