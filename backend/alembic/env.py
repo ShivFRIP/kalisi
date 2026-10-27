@@ -16,8 +16,19 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 
+def include_object(obj, name, type_, reflected, compare_to):
+    """Only manage Kalisi's own tables. PostGIS images can add tables of their own (e.g. the tiger geocoder's
+    zcta5, edges, faces…) to the database; those must never be reported as drift or dropped by a migration.
+    Trade-off: a table removed from the models must be dropped by a hand-written migration."""
+    if type_ == "table" and reflected and name not in target_metadata.tables:
+        return False
+    if type_ == "index" and reflected and getattr(getattr(obj, "table", None), "name", None) not in target_metadata.tables:
+        return False
+    return alembic_helpers.include_object(obj, name, type_, reflected, compare_to)
+
+
 def _opts() -> dict:
-    return dict(target_metadata=target_metadata, include_object=alembic_helpers.include_object,
+    return dict(target_metadata=target_metadata, include_object=include_object,
                 process_revision_directives=alembic_helpers.writer, render_item=alembic_helpers.render_item)
 
 
