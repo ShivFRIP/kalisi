@@ -29,7 +29,19 @@ The installer does **not** use or change the host's PostgreSQL, `ecourts_india`,
 
 **A note about the existing nginx site.** Today, port 80 on 80.65.208.51 shows a public directory listing ("Index of /") of `proxy.py`, `setup_mac.sh` and `setup_windows.ps1`. Anyone can download those files. Kalisi doesn't change that site, but it's worth checking those files and turning the listing off.
 
-## First install (about 10 minutes, mostly the first build)
+## Deploying from GitHub (no commands on the server)
+
+The workflow `.github/workflows/deploy-contabo1.yml` runs on GitHub's runners and reaches the server over SSH. It needs one repository secret, added under Settings → Secrets and variables → Actions:
+- `CONTABO_SSH_KEY`: a private key authorised for root (preferred); or
+- `CONTABO_PASSWORD`: the root password.
+
+There are two ways to run it:
+- push to the `deploy/contabo1` branch, putting `[install]` in the commit message to install or update; or
+- use the Actions tab: Deploy to contabo1 → Run workflow.
+
+Without `[install]` it only runs a **read-only check** of the server. The install keeps the server's `deploy/contabo1/.env`, then tests the public links from the internet. A copy deployed this way has no git checkout on the server, so update it through the workflow, not `update.sh`.
+
+## First install by hand (about 10 minutes, mostly the first build)
 
 On contabo1, as root:
 

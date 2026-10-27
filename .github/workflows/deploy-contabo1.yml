@@ -92,7 +92,7 @@ jobs:
         run: |
           tar czf - --exclude=.git --exclude=node_modules --exclude=.venv --exclude=dist \
               --exclude=deploy/contabo1/.env --exclude=deploy/contabo1/Caddyfile.local --exclude=deploy/contabo1/static.local . \
-            | ~/remote 'mkdir -p /root/kalisi && tar xzf - -C /root/kalisi && echo "$GITHUB_SHA" > /root/kalisi/DEPLOYED_COMMIT'
+            | ~/remote 'mkdir -p /root/kalisi && tar xzf - -C /root/kalisi'
           ~/remote "echo $GITHUB_SHA > /root/kalisi/DEPLOYED_COMMIT && ls /root/kalisi"
 
       - name: Install / update
